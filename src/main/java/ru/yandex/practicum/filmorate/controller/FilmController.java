@@ -36,15 +36,9 @@ public class FilmController {
     public ResponseEntity<Film> updateFilm(@RequestBody Film film) {
         try {
             FilmValidator.validate(film);
-        } catch (ValidationException e) {
-            return new ResponseEntity<>(film, HttpStatus.valueOf(500));
-        }
-
-        try {
             return new ResponseEntity<>(filmService.movieUpdate(film), HttpStatus.valueOf(200));
         } catch (ValidationException e) {
             return new ResponseEntity<>(film, HttpStatus.valueOf(500));
         }
-
     }
 }
