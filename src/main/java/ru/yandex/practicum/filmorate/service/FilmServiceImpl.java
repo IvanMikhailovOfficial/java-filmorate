@@ -65,8 +65,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public List<Film> getPopularFilms(Integer count) {
-        return filmStorage.getAllFilms().stream().sorted((a, b) -> b.getLikes().size() - a.getLikes().size()).
-                limit(count).collect(Collectors.toList());
-
+        return filmStorage.getAllFilms().stream().sorted((a, b) -> b.getLikes().size() - a.getLikes().size())
+                .limit(count).collect(Collectors.toList());
     }
 }
