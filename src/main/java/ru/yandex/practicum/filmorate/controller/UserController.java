@@ -1,26 +1,27 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.errors.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.validateon.UserValidator;
 
 import java.util.List;
 
 @RequestMapping("/users")
 @RestController
 public class UserController {
-    private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService = new UserService();
 
     @PostMapping
     public ResponseEntity<User> create(@RequestBody User user) {
+        try {
+            UserValidator.validate(user);
+        } catch (ValidationException e) {
+            return new ResponseEntity<>(user, HttpStatus.valueOf(500));
+        }
         return new ResponseEntity<>(userService.addUser(user), HttpStatus.valueOf(201));
     }
 
@@ -31,33 +32,16 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User user) {
-        return new ResponseEntity<User>(userService.userUpdate(user), HttpStatus.valueOf(200));
-    }
+        try {
+            UserValidator.validate(user);
+        } catch (ValidationException e) {
+            return new ResponseEntity<>(user, HttpStatus.valueOf(500));
+        }
+        try {
+            return new ResponseEntity<User>(userService.userUpdate(user), HttpStatus.valueOf(200));
+        } catch (ValidationException e) {
+            return new ResponseEntity<>(userService.userUpdate(user), HttpStatus.NOT_FOUND);
+        }
 
-    @PutMapping("{id}/friends/{friendId}")
-    public ResponseEntity<?> addingToFriends(@PathVariable Long id, @PathVariable Long friendId) {
-        userService.addingToFriends(id, friendId);
-        return new ResponseEntity<>(HttpStatus.valueOf(200));
-    }
-
-    @DeleteMapping("{id}/friends/{friendsId}")
-    public ResponseEntity<?> deleteFromFriends(@PathVariable Long id, @PathVariable Long friendsId) {
-        userService.deleteFromFriends(id, friendsId);
-        return new ResponseEntity<>(HttpStatus.valueOf(200));
-    }
-
-    @GetMapping("{id}/friends")
-    public ResponseEntity<List<User>> getFriendList(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.getFriendList(id), HttpStatus.OK);
-    }
-
-    @GetMapping("{id}/friends/common/{otherId}")
-    public ResponseEntity<List<User>> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
-        return new ResponseEntity<>(userService.getCommonFriends(id, otherId), HttpStatus.OK);
-    }
-
-    @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.valueOf(200));
     }
 }
