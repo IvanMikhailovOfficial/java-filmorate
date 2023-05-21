@@ -38,7 +38,6 @@ public class InMemoryUserStorage implements UserStorage {
         } else {
             log.debug("Ошибка обновления пользователя " + user);
             throw new NotFoundException("Ошибка обновления пользователя");
-            //throw new ResponseStatusException(HttpStatus.valueOf(404), "Ошибка обновления пользователя");
         }
     }
 
@@ -48,7 +47,6 @@ public class InMemoryUserStorage implements UserStorage {
             return userStorage.get(id);
         } else {
             throw new NotFoundException("Пользователь с таким id не найден");
-            //throw new ResponseStatusException(HttpStatus.valueOf(404), "Пользователь с таким id не найден");
         }
     }
 }

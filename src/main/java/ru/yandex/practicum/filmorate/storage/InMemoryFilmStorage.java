@@ -38,7 +38,6 @@ public class InMemoryFilmStorage implements FilmStorage {
         } else {
             log.debug("Невозможно обновить фильм " + film);
             throw new NotFoundException("Невозможно обновить фильм с таким id");
-            //throw new ResponseStatusException(HttpStatus.valueOf(404), "Невозможно обновить фильм с таким id");
         }
     }
 
@@ -48,7 +47,6 @@ public class InMemoryFilmStorage implements FilmStorage {
             return movieStorage.get(id);
         } else {
             throw new NotFoundException("Фильм с таким id не найден");
-            //throw new ResponseStatusException(HttpStatus.valueOf(404), "Фильм с таким id не найден");
         }
     }
 }
