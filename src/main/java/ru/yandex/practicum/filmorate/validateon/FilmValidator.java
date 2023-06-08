@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.validateon;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.errors.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -8,7 +10,15 @@ import java.time.LocalDate;
 
 @Slf4j
 public class FilmValidator {
+
+    private FilmValidator() {
+    }
+
     public static void validate(Film film) {
+        if (film == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Передан null в качестве аргумента");
+        }
+
         if (film.getName().isBlank()) {
             log.debug("Имя фильма не может быть пустым " + film);
             throw new ValidationException("Имя фильма не может быть пустым");

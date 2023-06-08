@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.validateon;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.errors.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -8,7 +10,14 @@ import java.time.LocalDate;
 
 @Slf4j
 public class UserValidator {
+
+    private UserValidator() {
+    }
+
     public static void validate(User user) {
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Передан null в качестве аргумента");
+        }
 
         if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
             log.debug("Некорректный email у " + user);

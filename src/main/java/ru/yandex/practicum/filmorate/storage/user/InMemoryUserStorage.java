@@ -1,7 +1,8 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.yandex.practicum.filmorate.errors.ValidationException;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.errors.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -9,8 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 @Slf4j
-public class UserService {
+public class InMemoryUserStorage implements UserStorage {
+
     private Long idGenerator = 1L;
 
     private final Map<Long, User> userStorage = new HashMap<>();
@@ -35,7 +38,34 @@ public class UserService {
             return user;
         } else {
             log.debug("Ошибка обновления пользователя " + user);
-            throw new ValidationException("Ошибка обновления пользователя");
+            throw new NotFoundException("Ошибка обновления пользователя");
         }
+    }
+
+    @Override
+    public User getUser(Long id) {
+        if (userStorage.containsKey(id)) {
+            return userStorage.get(id);
+        } else {
+            throw new NotFoundException("Пользователь с таким id не найден");
+        }
+    }
+
+    @Override
+    public void addingToFriends(Long id, Long friendId) {
+    }
+
+    @Override
+    public void deleteFromFriends(Long id, Long friendId) {
+    }
+
+    @Override
+    public List<User> getFriendList(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<User> getCommonFriends(Long id, Long otherId) {
+        return null;
     }
 }
