@@ -5,9 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.errors.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.validateon.FilmValidator;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 public class FilmValidatorTest {
 
@@ -16,7 +18,8 @@ public class FilmValidatorTest {
     @BeforeEach
     public void init() {
         film = new Film(1L, "Java", " 1_000_000",
-                LocalDate.of(2000, 12, 25), 96);
+                LocalDate.of(2000, 12, 25), 96, new HashSet<>(), new HashSet<>(),
+                new Mpa(1, "PG"));
     }
 
 
