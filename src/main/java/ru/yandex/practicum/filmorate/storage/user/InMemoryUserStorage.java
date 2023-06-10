@@ -53,19 +53,39 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public void addingToFriends(Long id, Long friendId) {
+        if (userStorage.containsKey(id) && userStorage.containsKey(friendId)) {
+            userStorage.get(id).getFriends().add(userStorage.get(friendId));
+        } else {
+            throw new NotFoundException("Пользователь не найден");
+        }
     }
 
     @Override
     public void deleteFromFriends(Long id, Long friendId) {
+        if (userStorage.containsKey(id) && userStorage.containsKey(friendId)) {
+            userStorage.get(id).getFriends().remove(userStorage.get(friendId));
+        } else {
+            throw new NotFoundException("Удалить пользователя не удалось");
+        }
     }
 
     @Override
     public List<User> getFriendList(Long id) {
-        return null;
+        if (userStorage.containsKey(id)) {
+            return new ArrayList<>(userStorage.get(id).getFriends());
+        } else {
+            throw new NotFoundException("Пользователь не найден");
+        }
     }
 
     @Override
     public List<User> getCommonFriends(Long id, Long otherId) {
-        return null;
+        if (userStorage.containsKey(id) && userStorage.containsKey(otherId)) {
+            List<User> users = new ArrayList<>(userStorage.get(id).getFriends());
+            users.retainAll(userStorage.get(otherId).getFriends());
+            return users;
+        } else {
+            throw new NotFoundException("Пользователь не найден");
+        }
     }
 }

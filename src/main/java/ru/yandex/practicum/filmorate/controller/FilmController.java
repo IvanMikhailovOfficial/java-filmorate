@@ -1,28 +1,25 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/films")
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class FilmController {
     private final FilmService filmService;
 
-    @Autowired
-    public FilmController(FilmService filmService) {
-        this.filmService = filmService;
-    }
-
     @PostMapping
-    public ResponseEntity<Film> createFilm(@RequestBody Film film) {
+    public ResponseEntity<Film> createFilm(@RequestBody @Valid Film film) {
         log.debug("Был вызван POST метод createFilm");
         return new ResponseEntity<>(filmService.addingAMovie(film), HttpStatus.valueOf(200));
     }
@@ -34,7 +31,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public ResponseEntity<Film> updateFilm(@RequestBody Film film) {
+    public ResponseEntity<Film> updateFilm(@RequestBody @Valid Film film) {
         log.debug("Был вызван PUT метод updateFilm");
         return new ResponseEntity<>(filmService.movieUpdate(film), HttpStatus.valueOf(200));
     }
