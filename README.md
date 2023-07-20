@@ -1,2 +1,2 @@
-# java-filmorate
-Template repository for Filmorate project.
+# java-shareit
+Template repository for Shareit project.
